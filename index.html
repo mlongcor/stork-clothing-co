@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stork Clothing Co — Baby Clothes, Delivered.</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream: #fdf7f0;
+      --sand: #f0e6d3;
+      --warm-tan: #d4b896;
+      --terracotta: #c4714a;
+      --rust: #a85535;
+      --sage: #7a9e7e;
+      --dark-sage: #4a7050;
+      --charcoal: #2c2825;
+      --soft-brown: #6b5744;
+      --white: #ffffff;
+      --shadow: rgba(44, 40, 37, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(253,247,240,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand);
+      padding: 0 2rem;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      cursor: pointer;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .nav-logo span { color: var(--terracotta); }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none; align-items: center;
+    }
+
+    .nav-links li {
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--soft-brown);
+      cursor: pointer;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links li:hover, .nav-links li.active { color: var(--terracotta); }
+
+    .nav-cta {
+      background: var(--terracotta);
+      color: var(--white) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s !important;
+    }
+
+    .nav-cta:hover { background: var(--rust) !important; transform: translateY(-1px); }
+
+    /* ── PAGES ── */
+    .page { display: none; padding-top: 68px; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ── HOME PAGE ── */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 68px);
+      display: flex; align-items: center;
+      overflow: hidden;
+      padding: 4rem 2rem;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 70% 50%, #e8d5c0 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 80% at 10% 80%, #d4c5b0 0%, transparent 50%),
+                  var(--cream);
+    }
+
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, var(--warm-tan) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 600px;
+      margin-left: max(4rem, 8vw);
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dark-sage);
+      background: rgba(122, 158, 126, 0.15);
+      padding: 0.35rem 0.9rem; border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      color: var(--charcoal);
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem; font-weight: 300; line-height: 1.7;
+      color: var(--soft-brown); max-width: 460px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--white);
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 500;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(196, 113, 74, 0.35);
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--rust);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(196, 113, 74, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500;
+      color: var(--soft-brown); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .btn-secondary:hover { color: var(--terracotta); }
+
+    .hero-float {
+      position: absolute; right: max(2rem, 5vw); top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 1.2rem;
+      animation: fadeUp 1.1s 0.2s ease both;
+    }
+
+    .float-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 8px 32px var(--shadow);
+      display: flex; align-items: center; gap: 1rem;
+      width: 260px;
+    }
+
+    .float-card-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+
+    .float-card h4 { font-size: 0.85rem; font-weight: 500; color: var(--charcoal); }
+    .float-card p { font-size: 0.78rem; color: var(--soft-brown); margin-top: 0.15rem; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--charcoal);
+      padding: 2.5rem 2rem;
+      display: flex; justify-content: center; gap: clamp(2rem, 6vw, 6rem);
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700; color: var(--warm-tan);
+    }
+    .stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+    /* ── HOW IT WORKS PREVIEW ── */
+    .section { padding: 6rem 2rem; }
+    .section-center { text-align: center; }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--dark-sage);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1.2;
+      color: var(--charcoal);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem; font-weight: 300; color: var(--soft-brown);
+      max-width: 520px; margin: 0 auto 3.5rem; line-height: 1.7;
+    }
+
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+    }
+
+    .step-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2rem 1.75rem;
+      box-shadow: 0 4px 24px var(--shadow);
+      position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(44,40,37,0.12); }
+
+    .step-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--terracotta), var(--warm-tan));
+    }
+
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700;
+      color: var(--sand);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .step-title { font-size: 1.1rem; font-weight: 500; color: var(--charcoal); margin-bottom: 0.6rem; }
+    .step-desc { font-size: 0.9rem; color: var(--soft-brown); line-height: 1.65; font-weight: 300; }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; max-width: 920px; margin: 0 auto;
+    }
+
+    .plan-card {
+      background: var(--white);
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 4px 24px var(--shadow);
+      position: relative; overflow: hidden;
+      transition: transform 0.25s;
+      border: 2px solid transparent;
+    }
+
+    .plan-card:hover { transform: translateY(-4px); }
+
+    .plan-card.featured {
+      background: var(--charcoal);
+      border-color: var(--terracotta);
+    }
+
+    .plan-badge {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: var(--terracotta);
+      color: var(--white);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      border-radius: 50px;
+    }
+
+    .plan-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--charcoal);
+      margin-bottom: 0.4rem;
+    }
+
+    .plan-card.featured .plan-name { color: var(--cream); }
+
+    .plan-desc { font-size: 0.88rem; color: var(--soft-brown); margin-bottom: 1.5rem; font-weight: 300; }
+    .plan-card.featured .plan-desc { color: rgba(253,247,240,0.6); }
+
+    .plan-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700; color: var(--terracotta);
+      line-height: 1;
+    }
+
+    .plan-price span { font-size: 1rem; color: var(--soft-brown); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+    .plan-card.featured .plan-price span { color: rgba(253,247,240,0.5); }
+
+    .plan-divider { border: none; border-top: 1px solid var(--sand); margin: 1.5rem 0; }
+    .plan-card.featured .plan-divider { border-color: rgba(255,255,255,0.15); }
+
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+
+    .plan-features li {
+      font-size: 0.9rem; font-weight: 300; color: var(--soft-brown);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+
+    .plan-card.featured .plan-features li { color: rgba(253,247,240,0.8); }
+
+    .plan-features li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+
+    .btn-plan {
+      width: 100%; padding: 0.9rem;
+      border-radius: 50px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500; cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-plan-outline {
+      background: transparent;
+      border: 2px solid var(--terracotta);
+      color: var(--terracotta);
+    }
+
+    .btn-plan-outline:hover { background: var(--terracotta); color: var(--white); }
+
+    .btn-plan-filled {
+      background: var(--terracotta); border: 2px solid var(--terracotta);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(196,113,74,0.35);
+    }
+
+    .btn-plan-filled:hover { background: var(--rust); border-color: var(--rust); transform: translateY(-1px); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-bg { background: var(--sand); }
+
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; max-width: 1000px; margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 1.75rem;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    .testimonial-stars { color: #e8a23a; font-size: 0.9rem; margin-bottom: 0.8rem; }
+    .testimonial-text { font-size: 0.95rem; font-weight: 300; color: var(--charcoal); line-height: 1.7; font-style: italic; margin-bottom: 1.2rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .author-name { font-size: 0.88rem; font-weight: 500; color: var(--charcoal); }
+    .author-meta { font-size: 0.78rem; color: var(--soft-brown); }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--terracotta) 0%, #b85e3a 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .cta-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--white); margin-bottom: 1rem;
+    }
+
+    .cta-banner p { color: rgba(255,255,255,0.75); font-weight: 300; font-size: 1.05rem; margin-bottom: 2.5rem; }
+
+    .btn-white {
+      background: var(--white); color: var(--terracotta);
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 500;
+      padding: 0.9rem 2.4rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--cream); margin-bottom: 0.5rem;
+    }
+
+    .footer-logo span { color: var(--terracotta); }
+
+    footer p { font-size: 0.83rem; color: rgba(255,255,255,0.35); margin-top: 1.5rem; }
+
+    .footer-links {
+      display: flex; gap: 2rem; justify-content: center;
+      list-style: none; margin: 1.2rem 0;
+    }
+
+    .footer-links li { font-size: 0.85rem; color: rgba(255,255,255,0.5); cursor: pointer; transition: color 0.2s; }
+    .footer-links li:hover { color: var(--warm-tan); }
+
+    /* ── ABOUT PAGE ── */
+    .about-hero {
+      background: linear-gradient(135deg, var(--sand) 0%, var(--cream) 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; max-width: 960px; margin: 0 auto;
+      align-items: center; padding: 4rem 2rem;
+    }
+
+    .about-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; color: var(--charcoal); margin-bottom: 1rem;
+    }
+
+    .about-text p { font-weight: 300; line-height: 1.8; color: var(--soft-brown); margin-bottom: 1rem; }
+
+    .about-visual {
+      background: var(--sand);
+      border-radius: 28px;
+      padding: 3rem;
+      text-align: center;
+      box-shadow: 0 8px 32px var(--shadow);
+    }
+
+    .about-visual-icon { font-size: 5rem; margin-bottom: 1rem; }
+    .about-visual h4 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--charcoal); }
+    .about-visual p { font-size: 0.9rem; color: var(--soft-brown); font-weight: 300; margin-top: 0.5rem; }
+
+    .values-section {
+      background: var(--white);
+      padding: 5rem 2rem;
+    }
+
+    .values-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem; max-width: 960px; margin: 0 auto;
+    }
+
+    .value-card {
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+      background: var(--cream);
+      border-left: 4px solid var(--terracotta);
+    }
+
+    .value-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .value-title { font-size: 1rem; font-weight: 500; color: var(--charcoal); margin-bottom: 0.5rem; }
+    .value-desc { font-size: 0.88rem; color: var(--soft-brown); font-weight: 300; line-height: 1.65; }
+
+    .full-how-steps {
+      max-width: 780px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 2rem;
+      padding: 0 1rem;
+    }
+
+    .full-step {
+      display: flex; gap: 1.75rem; align-items: flex-start;
+    }
+
+    .full-step-num {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--terracotta); color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .full-step-content h4 { font-size: 1.1rem; font-weight: 500; color: var(--charcoal); margin-bottom: 0.4rem; }
+    .full-step-content p { font-size: 0.93rem; color: var(--soft-brown); font-weight: 300; line-height: 1.7; }
+
+    /* ── FAQ PAGE ── */
+    .faq-hero {
+      background: var(--sand);
+      padding: 5rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .faq-list {
+      max-width: 760px; margin: 0 auto;
+      padding: 3rem 2rem; display: flex; flex-direction: column; gap: 1rem;
+    }
+
+    .faq-item {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px var(--shadow);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .faq-item:hover { box-shadow: 0 6px 28px rgba(44,40,37,0.1); }
+
+    .faq-question {
+      width: 100%; background: none; border: none; cursor: pointer;
+      padding: 1.4rem 1.75rem;
+      display: flex; justify-content: space-between; align-items: center;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 500; color: var(--charcoal);
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: var(--terracotta); }
+    .faq-question.open { color: var(--terracotta); }
+
+    .faq-chevron {
+      font-size: 0.75rem; transition: transform 0.3s;
+      color: var(--warm-tan);
+    }
+
+    .faq-chevron.open { transform: rotate(180deg); }
+
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s;
+      padding: 0 1.75rem;
+    }
+
+    .faq-answer.open {
+      max-height: 300px;
+      padding: 0 1.75rem 1.5rem;
+    }
+
+    .faq-answer p {
+      font-size: 0.93rem; color: var(--soft-brown); line-height: 1.75;
+      font-weight: 300; border-top: 1px solid var(--sand); padding-top: 1rem;
+    }
+
+    /* ── ONBOARDING FORM ── */
+    .onboarding-wrap {
+      max-width: 640px; margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+
+    .onboarding-header { text-align: center; margin-bottom: 3rem; }
+    .onboarding-header .section-tag { margin-bottom: 0.6rem; }
+    .onboarding-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; color: var(--charcoal); margin-bottom: 0.6rem;
+    }
+    .onboarding-header p { font-size: 0.95rem; color: var(--soft-brown); font-weight: 300; }
+
+    .progress-bar-wrap { margin-bottom: 3rem; }
+
+    .progress-steps {
+      display: flex; justify-content: space-between;
+      position: relative; margin-bottom: 0.8rem;
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+      background: var(--sand); transform: translateY(-50%); z-index: 0;
+    }
+
+    .progress-line {
+      position: absolute; top: 50%; left: 0; height: 2px;
+      background: var(--terracotta); transform: translateY(-50%);
+      z-index: 1; transition: width 0.5s ease;
+    }
+
+    .progress-step {
+      width: 32px; height: 32px; border-radius: 50%; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .progress-step.done {
+      background: var(--terracotta); color: var(--white);
+      box-shadow: 0 0 0 3px rgba(196,113,74,0.25);
+    }
+
+    .progress-step.current {
+      background: var(--white); color: var(--terracotta);
+      border: 2px solid var(--terracotta);
+      box-shadow: 0 0 0 3px rgba(196,113,74,0.15);
+    }
+
+    .progress-step.upcoming {
+      background: var(--white); color: var(--warm-tan);
+      border: 2px solid var(--sand);
+    }
+
+    .progress-labels {
+      display: flex; justify-content: space-between;
+    }
+
+    .progress-labels span {
+      font-size: 0.72rem; color: var(--soft-brown); text-align: center;
+      width: 32px; display: block;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: 28px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 40px var(--shadow);
+    }
+
+    .form-step { display: none; }
+    .form-step.active {
+      display: block;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .form-step h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--charcoal); margin-bottom: 0.4rem;
+    }
+
+    .form-step .step-intro { font-size: 0.9rem; color: var(--soft-brown); font-weight: 300; margin-bottom: 2rem; }
+
+    .form-group { margin-bottom: 1.4rem; }
+
+    .form-group label {
+      display: block; font-size: 0.85rem; font-weight: 500;
+      color: var(--soft-brown); margin-bottom: 0.4rem;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%; padding: 0.8rem 1rem;
+      border: 2px solid var(--sand);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; color: var(--charcoal);
+      background: var(--cream);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--terracotta);
+      background: var(--white);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .plan-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.85rem; }
+
+    .plan-option input[type="radio"] { display: none; }
+
+    .plan-option label {
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      padding: 1.2rem 0.75rem;
+      border: 2px solid var(--sand);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--cream);
+    }
+
+    .plan-option input:checked + label {
+      border-color: var(--terracotta);
+      background: rgba(196,113,74,0.06);
+    }
+
+    .plan-option label:hover { border-color: var(--warm-tan); }
+
+    .plan-option .plan-emoji { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .plan-option .plan-opt-name { font-size: 0.82rem; font-weight: 500; color: var(--charcoal); }
+    .plan-option .plan-opt-price { font-size: 0.75rem; color: var(--soft-brown); margin-top: 0.2rem; }
+
+    .size-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+
+    .size-option input[type="checkbox"] { display: none; }
+
+    .size-option label {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1rem 0.5rem;
+      border: 2px solid var(--sand); border-radius: 12px;
+      cursor: pointer; transition: all 0.2s;
+      background: var(--cream);
+    }
+
+    .size-option input:checked + label {
+      border-color: var(--sage);
+      background: rgba(122,158,126,0.08);
+      color: var(--dark-sage);
+    }
+
+    .size-option label:hover { border-color: var(--warm-tan); }
+    .size-option .size-label { font-size: 0.9rem; font-weight: 500; color: var(--charcoal); }
+    .size-option .size-sublabel { font-size: 0.72rem; color: var(--soft-brown); margin-top: 0.2rem; }
+
+    .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+
+    .btn-back {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--soft-brown);
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .btn-back:hover { color: var(--charcoal); }
+
+    .btn-next {
+      background: var(--terracotta); color: var(--white);
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(196,113,74,0.3);
+    }
+
+    .btn-next:hover { background: var(--rust); transform: translateY(-1px); }
+
+    .success-wrap {
+      text-align: center; padding: 2rem 0;
+    }
+
+    .success-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(122,158,126,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; margin: 0 auto 1.5rem;
+    }
+
+    .success-wrap h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; color: var(--charcoal); margin-bottom: 0.75rem;
+    }
+
+    .success-wrap p { font-size: 0.95rem; color: var(--soft-brown); font-weight: 300; line-height: 1.7; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-float { display: none; }
+      .hero-content { margin-left: 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .nav-links { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .plan-options { grid-template-columns: 1fr; }
+      .size-options { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="navigate('home')">🪶 Stork <span>Clothing Co</span></div>
+  <ul class="nav-links">
+    <li onclick="navigate('home')" id="nav-home" class="active">Home</li>
+    <li onclick="navigate('about')" id="nav-about">How It Works</li>
+    <li onclick="navigate('faq')" id="nav-faq">FAQs</li>
+    <li onclick="navigate('onboarding')" class="nav-cta">Get Started!</li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════ HOME PAGE ═══════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-dots"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">✦ Baby Clothing Subscription</div>
+      <h1 class="hero-title">
+        Dressed for every<br/><em>tiny moment.</em>
+      </h1>
+      <p class="hero-subtitle">
+        Curated, high-quality baby clothes delivered monthly — sized perfectly for your little one from newborn to 12 months. No more shopping. Just adorable outfits, right on time.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="window.location.href='intake-form.html'">
+          Get Started! →
+        </button>
+        <button class="btn-secondary" onclick="navigate('about')">
+          ▶ See how it works
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-float">
+      <div class="float-card">
+        <div class="float-card-icon" style="background: rgba(196,113,74,0.1);">👕</div>
+        <div>
+          <h4>Monthly Surprise Box</h4>
+          <p>5–8 curated pieces per month</p>
+        </div>
+      </div>
+      <div class="float-card">
+        <div class="float-card-icon" style="background: rgba(122,158,126,0.1);">🌿</div>
+        <div>
+          <h4>Organic Fabrics</h4>
+          <p>Gentle on sensitive skin</p>
+        </div>
+      </div>
+      <div class="float-card">
+        <div class="float-card-icon" style="background: rgba(212,184,150,0.2);">📏</div>
+        <div>
+          <h4>Size Guarantee</h4>
+          <p>We ship before baby outgrows</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Happy Families</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6–8</div>
+      <div class="stat-label">Pieces Per Box</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Organic Cotton</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS (PREVIEW) -->
+  <section class="section section-center">
+    <div class="section-tag">Simple as it gets</div>
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-sub">Getting started takes less than 3 minutes. Then sit back — we handle the rest.</p>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <div class="step-icon">📝</div>
+        <h3 class="step-title">Tell Us About Baby</h3>
+        <p class="step-desc">Share your baby's age, current size, and style preferences so we can personalise every box.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <div class="step-icon">🎁</div>
+        <h3 class="step-title">We Curate the Box</h3>
+        <p class="step-desc">Our stylists hand-select 6–8 coordinated pieces in soft, certified organic fabrics.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <div class="step-icon">🚚</div>
+        <h3 class="step-title">Delivered Monthly</h3>
+        <p class="step-desc">Your box ships on the same date each month, timed perfectly as your baby grows.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">04</div>
+        <div class="step-icon">♻️</div>
+        <h3 class="step-title">Keep What You Love</h3>
+        <p class="step-desc">Keep everything or return what doesn't fit — free returns, no questions asked.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section section-center" style="background: var(--white);">
+    <div class="section-tag">Flexible plans</div>
+    <h2 class="section-title">Simple Pricing</h2>
+    <p class="section-sub">All plans include free shipping, free returns, and our size guarantee.</p>
+    <div class="pricing-grid">
+
+      <div class="plan-card">
+        <h3 class="plan-name">Starter</h3>
+        <p class="plan-desc">Perfect for trying it out</p>
+        <div class="plan-price">$39<span>/month</span></div>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>5 curated pieces per box</li>
+          <li>One size bracket</li>
+          <li>Free shipping</li>
+          <li>Free returns</li>
+          <li>Monthly delivery</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="navigate('onboarding')">Choose Starter</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <h3 class="plan-name">Grow</h3>
+        <p class="plan-desc">Our best value for growing babies</p>
+        <div class="plan-price" style="color: var(--warm-tan);">$59<span>/month</span></div>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>8 curated pieces per box</li>
+          <li>Two size brackets</li>
+          <li>Free shipping</li>
+          <li>Free returns</li>
+          <li>Style preference card</li>
+          <li>Priority customer support</li>
+        </ul>
+        <button class="btn-plan btn-plan-filled" onclick="navigate('onboarding')">Choose Grow</button>
+      </div>
+
+      <div class="plan-card">
+        <h3 class="plan-name">Luxe</h3>
+        <p class="plan-desc">Premium fabrics, premium experience</p>
+        <div class="plan-price">$89<span>/month</span></div>
+        <hr class="plan-divider" />
+        <ul class="plan-features">
+          <li>10 curated pieces per box</li>
+          <li>All sizes covered</li>
+          <li>Premium organic fabrics</li>
+          <li>Free shipping & returns</li>
+          <li>Dedicated stylist</li>
+          <li>Early access to new styles</li>
+        </ul>
+        <button class="btn-plan btn-plan-outline" onclick="navigate('onboarding')">Choose Luxe</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section-center testimonials-bg">
+    <div class="section-tag">Parent love</div>
+    <h2 class="section-title">What Families Are Saying</h2>
+    <p class="section-sub">Over 12,000 families trust Stork to keep their babies dressed beautifully.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I was overwhelmed with newborn shopping, and Stork completely saved me. Every box has been adorable and the quality is genuinely better than anything I'd buy myself."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#fdebd5;">👩</div>
+          <div>
+            <div class="author-name">Sarah M.</div>
+            <div class="author-meta">Mom to Ellie, 4 months</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The size guarantee is real! They actually sent the next size up proactively before our son outgrew the last batch. Truly thoughtful service."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#dff0e4;">👨</div>
+          <div>
+            <div class="author-name">James T.</div>
+            <div class="author-meta">Dad to Noah, 7 months</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The fabrics are so soft I'd wear them myself honestly. My daughter gets compliments at every playdate. Worth every penny of the Luxe plan!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar" style="background:#e8e0f5;">👩</div>
+          <div>
+            <div class="author-name">Priya K.</div>
+            <div class="author-meta">Mom to Anya, 9 months</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <div class="cta-banner">
+    <h2>Ready to dress your little one?</h2>
+    <p>Join 12,000+ families who've made baby shopping effortless.</p>
+    <button class="btn-white" onclick="navigate('onboarding')">Get Started Today →</button>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">🪶 Stork <span>Clothing Co</span></div>
+    <ul class="footer-links">
+      <li onclick="navigate('home')">Home</li>
+      <li onclick="navigate('about')">How It Works</li>
+      <li onclick="navigate('faq')">FAQs</li>
+      <li onclick="navigate('onboarding')">Get Started</li>
+    </ul>
+    <p>© 2025 Stork Clothing Co. All rights reserved. Made with ♥ for tiny humans.</p>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════ ABOUT / HOW IT WORKS PAGE ═══════════════════════════════ -->
+<div id="page-about" class="page">
+
+  <div class="about-hero">
+    <div class="section-tag">Our story & process</div>
+    <h1 class="section-title">How Stork Works</h1>
+    <p class="section-sub">We believe new parents deserve one less thing to worry about. Here's exactly how we make that happen.</p>
+  </div>
+
+  <!-- FULL STEPS -->
+  <section class="section">
+    <div class="section-tag section-center" style="display:block; text-align:center;">Step by step</div>
+    <h2 class="section-title section-center" style="text-align:center; margin-bottom:3rem;">Your Stork Journey</h2>
+
+    <div class="full-how-steps">
+      <div class="full-step">
+        <div class="full-step-num">1</div>
+        <div class="full-step-content">
+          <h4>Create Your Baby's Profile</h4>
+          <p>Tell us your baby's name, date of birth, and current clothing size. We also ask about fabric preferences (we love organic cotton!) and any style notes — whether you're into classic neutrals, bold prints, or playful patterns.</p>
+        </div>
+      </div>
+      <div class="full-step">
+        <div class="full-step-num">2</div>
+        <div class="full-step-content">
+          <h4>Choose Your Plan</h4>
+          <p>Pick from our Starter (5 pieces), Grow (8 pieces), or Luxe (10 pieces) monthly subscription plans. All plans include free shipping and free returns. You can upgrade, downgrade, or pause anytime.</p>
+        </div>
+      </div>
+      <div class="full-step">
+        <div class="full-step-num">3</div>
+        <div class="full-step-content">
+          <h4>Our Stylists Hand-Pick Your Box</h4>
+          <p>Our in-house baby stylists curate a coordinated set of clothing pieces tailored to your profile. Every item is certified GOTS organic, OEKO-TEX safe, and machine washable. No harsh dyes, no synthetic materials near sensitive skin.</p>
+        </div>
+      </div>
+      <div class="full-step">
+        <div class="full-step-num">4</div>
+        <div class="full-step-content">
+          <h4>Delivery, Right on Schedule</h4>
+          <p>Your box ships on the same date each month. We proactively size up as your baby grows — you'll never receive clothes that are already too small. Track your box in real time with our shipping notifications.</p>
+        </div>
+      </div>
+      <div class="full-step">
+        <div class="full-step-num">5</div>
+        <div class="full-step-content">
+          <h4>Keep Everything You Love</h4>
+          <p>Keep the whole box and you're charged nothing extra. Not in love with a piece? Our free returns are postage-paid and hassle-free. Your feedback shapes next month's curation — the longer you subscribe, the better your boxes get.</p>
+        </div>
+      </div>
+      <div class="full-step">
+        <div class="full-step-num">6</div>
+        <div class="full-step-content">
+          <h4>Grow With Us Beyond 12 Months</h4>
+          <p>As your baby approaches 12 months, we'll invite you to transition to our Toddler plan (coming soon!) so the magic never stops. Seamless, automatic, and tailored all the way.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <div class="section-tag section-center" style="display:block; text-align:center;">What we stand for</div>
+    <h2 class="section-title section-center" style="text-align:center; margin-bottom:3rem;">Our Values</h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🌱</div>
+        <h4 class="value-title">Sustainably Made</h4>
+        <p class="value-desc">Every piece is GOTS-certified organic cotton. We partner only with factories audited for fair labour practices and environmental responsibility.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">🧴</div>
+        <h4 class="value-title">Skin-Safe Always</h4>
+        <p class="value-desc">OEKO-TEX Standard 100 certified. No azo dyes, no formaldehyde, no harmful chemicals — ever. We test every batch before it goes in a box.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">♻️</div>
+        <h4 class="value-title">Less Waste</h4>
+        <p class="value-desc">Our packaging is 100% recycled and recyclable. We accept clothes back for our Stork Resale program, keeping baby fashion in circulation longer.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">💛</div>
+        <h4 class="value-title">Parent-First</h4>
+        <p class="value-desc">Built by parents, for parents. Every feature, policy, and design decision starts with one question: does this make a new parent's life easier?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT GRID -->
+  <section class="section">
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>Born from a sleepless night</h3>
+        <p>Stork Clothing Co was started in 2023 by two first-time parents who were exhausted, overwhelmed, and staring at an empty dresser at 2am — three days before their baby was due to size out of newborn clothes.</p>
+        <p>We thought: why isn't there a service that just… handles this? So we built it. Starting with a simple promise — the right clothes, the right size, at the right time — and growing it into something thousands of families now rely on every month.</p>
+        <p>We're a small, passionate team headquartered in Austin, TX. Every box is packed with intention, and every customer is treated like family.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-visual-icon">🪶</div>
+        <h4>Founded 2023</h4>
+        <p>Austin, Texas — with love for tiny humans everywhere</p>
+        <div style="margin-top:1.5rem; display:flex; justify-content:space-around; text-align:center;">
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--terracotta); font-weight:700;">500+</div>
+            <div style="font-size:0.75rem; color:var(--soft-brown); margin-top:0.2rem;">Families served</div>
+          </div>
+          <div>
+            <div style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--terracotta); font-weight:700;">50k+</div>
+            <div style="font-size:0.75rem; color:var(--soft-brown); margin-top:0.2rem;">Boxes shipped</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <h2>See it for yourself</h2>
+    <p>Your first box is just a few clicks away.</p>
+    <button class="btn-white" onclick="navigate('onboarding')">Get Started →</button>
+  </div>
+
+  <footer>
+    <div class="footer-logo">🪶 Stork <span>Clothing Co</span></div>
+    <ul class="footer-links">
+      <li onclick="navigate('home')">Home</li>
+      <li onclick="navigate('about')">How It Works</li>
+      <li onclick="navigate('faq')">FAQs</li>
+      <li onclick="navigate('onboarding')">Get Started</li>
+    </ul>
+    <p>© 2025 Stork Clothing Co. All rights reserved.</p>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════ FAQ PAGE ═══════════════════════════════ -->
+<div id="page-faq" class="page">
+
+  <div class="faq-hero">
+    <div class="section-tag">Got questions?</div>
+    <h1 class="section-title">Frequently Asked Questions</h1>
+    <p class="section-sub">Everything you need to know about Stork Clothing Co.</p>
+  </div>
+
+  <div class="faq-list" id="faq-container"></div>
+
+  <div class="cta-banner">
+    <h2>Still have questions?</h2>
+    <p>Our team is happy to help — reach us at hello@storkclothingco.com</p>
+    <button class="btn-white" onclick="navigate('onboarding')">Start Your Subscription →</button>
+  </div>
+
+  <footer>
+    <div class="footer-logo">🪶 Stork <span>Clothing Co</span></div>
+    <ul class="footer-links">
+      <li onclick="navigate('home')">Home</li>
+      <li onclick="navigate('about')">How It Works</li>
+      <li onclick="navigate('faq')">FAQs</li>
+      <li onclick="navigate('onboarding')">Get Started</li>
+    </ul>
+    <p>© 2025 Stork Clothing Co. All rights reserved.</p>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════ ONBOARDING PAGE ═══════════════════════════════ -->
+<div id="page-onboarding" class="page" style="background: var(--sand);">
+
+  <div class="onboarding-wrap">
+    <div class="onboarding-header">
+      <div class="section-tag">Let's get your box ready</div>
+      <h2>Welcome to Stork! 🪶</h2>
+      <p>Tell us about your baby and we'll curate the perfect first box.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-bar-wrap">
+      <div class="progress-steps" id="progress-steps">
+        <div class="progress-line" id="progress-line"></div>
+        <div class="progress-step done" id="ps-1">1</div>
+        <div class="progress-step upcoming" id="ps-2">2</div>
+        <div class="progress-step upcoming" id="ps-3">3</div>
+        <div class="progress-step upcoming" id="ps-4">4</div>
+      </div>
+      <div class="progress-labels">
+        <span>You</span><span>Baby</span><span>Plan</span><span>Done</span>
+      </div>
+    </div>
+
+    <div class="form-card">
+
+      <!-- STEP 1: Parent Info -->
+      <div class="form-step active" id="form-step-1">
+        <h3>About You</h3>
+        <p class="step-intro">Let's start with a few details about you.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="f-firstname" placeholder="Emma" />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="f-lastname" placeholder="Johnson" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="f-email" placeholder="emma@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number <span style="color:var(--warm-tan); font-weight:300;">(optional)</span></label>
+          <input type="tel" id="f-phone" placeholder="+1 (555) 000-0000" />
+        </div>
+        <div class="form-group">
+          <label>Shipping Address</label>
+          <input type="text" id="f-address" placeholder="123 Maple Street, Austin, TX 78701" />
+        </div>
+        <div class="form-actions">
+          <span></span>
+          <button class="btn-next" onclick="nextStep(1)">Next: Baby Info →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Baby Info -->
+      <div class="form-step" id="form-step-2">
+        <h3>About Your Baby 👶</h3>
+        <p class="step-intro">Help us get the sizing and style just right.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Baby's Name</label>
+            <input type="text" id="f-babyname" placeholder="Ellie" />
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" id="f-dob" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Current Clothing Size</label>
+          <select id="f-size">
+            <option value="">Select a size…</option>
+            <option value="preemie">Preemie (under 5 lbs)</option>
+            <option value="nb">Newborn (0–3 months)</option>
+            <option value="3m">3 Months</option>
+            <option value="6m">6 Months</option>
+            <option value="9m">9 Months</option>
+            <option value="12m">12 Months</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Style Preferences</label>
+          <div class="size-options">
+            <div class="size-option">
+              <input type="checkbox" id="st-neutral" name="style" value="neutral" />
+              <label for="st-neutral">
+                <span class="size-label">🤍 Neutral</span>
+                <span class="size-sublabel">Beiges & whites</span>
+              </label>
+            </div>
+            <div class="size-option">
+              <input type="checkbox" id="st-colorful" name="style" value="colorful" />
+              <label for="st-colorful">
+                <span class="size-label">🌈 Colorful</span>
+                <span class="size-sublabel">Bright & playful</span>
+              </label>
+            </div>
+            <div class="size-option">
+              <input type="checkbox" id="st-prints" name="style" value="prints" />
+              <label for="st-prints">
+                <span class="size-label">🦋 Prints</span>
+                <span class="size-sublabel">Patterns & motifs</span>
+              </label>
+            </div>
+            <div class="size-option">
+              <input type="checkbox" id="st-classic" name="style" value="classic" />
+              <label for="st-classic">
+                <span class="size-label">🎀 Classic</span>
+                <span class="size-sublabel">Timeless styles</span>
+              </label>
+            </div>
+            <div class="size-option">
+              <input type="checkbox" id="st-minimal" name="style" value="minimal" />
+              <label for="st-minimal">
+                <span class="size-label">✨ Minimal</span>
+                <span class="size-sublabel">Clean & simple</span>
+              </label>
+            </div>
+            <div class="size-option">
+              <input type="checkbox" id="st-seasonal" name="style" value="seasonal" />
+              <label for="st-seasonal">
+                <span class="size-label">🍂 Seasonal</span>
+                <span class="size-sublabel">Time-of-year looks</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-back" onclick="prevStep(2)">← Back</button>
+          <button class="btn-next" onclick="nextStep(2)">Next: Choose Plan →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Plan Selection -->
+      <div class="form-step" id="form-step-3">
+        <h3>Pick Your Plan</h3>
+        <p class="step-intro">All plans include free shipping and free returns. Cancel anytime.</p>
+        <div class="form-group">
+          <div class="plan-options" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="plan-option">
+              <input type="radio" id="plan-starter" name="plan" value="starter" />
+              <label for="plan-starter">
+                <span class="plan-emoji">🌱</span>
+                <span class="plan-opt-name">Starter</span>
+                <span class="plan-opt-price">$39/mo · 5 pieces</span>
+              </label>
+            </div>
+            <div class="plan-option">
+              <input type="radio" id="plan-grow" name="plan" value="grow" checked />
+              <label for="plan-grow">
+                <span class="plan-emoji">🌿</span>
+                <span class="plan-opt-name">Grow</span>
+                <span class="plan-opt-price">$59/mo · 8 pieces</span>
+              </label>
+            </div>
+            <div class="plan-option">
+              <input type="radio" id="plan-luxe" name="plan" value="luxe" />
+              <label for="plan-luxe">
+                <span class="plan-emoji">✨</span>
+                <span class="plan-opt-name">Luxe</span>
+                <span class="plan-opt-price">$89/mo · 10 pieces</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1.5rem;">
+          <label>Delivery Frequency</label>
+          <select id="f-frequency">
+            <option value="monthly">Monthly (Recommended)</option>
+            <option value="bimonthly">Every 2 Months</option>
+            <option value="quarterly">Quarterly</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select id="f-payment">
+            <option value="">Select payment…</option>
+            <option value="card">Credit / Debit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="applepay">Apple Pay</option>
+            <option value="googlepay">Google Pay</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Promo Code <span style="color:var(--warm-tan); font-weight:300;">(optional)</span></label>
+          <input type="text" id="f-promo" placeholder="STORK10" />
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-back" onclick="prevStep(3)">← Back</button>
+          <button class="btn-next" onclick="nextStep(3)">Complete Sign Up →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Success -->
+      <div class="form-step" id="form-step-4">
+        <div class="success-wrap">
+          <div class="success-icon">🎉</div>
+          <h3>You're all set!</h3>
+          <p>Welcome to the Stork family! 🪶<br/><br/>
+            We've received your details and our stylists are already curating your first box. 
+            You'll receive a confirmation email shortly, and your first delivery is on its way within <strong>3–5 business days</strong>.<br/><br/>
+            In the meantime, follow us on Instagram <strong>@storkclothingco</strong> for style previews and parenting tips.
+          </p>
+          <button class="btn-primary" style="margin-top:2rem;" onclick="navigate('home')">Back to Home →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // ── NAVIGATION ──
+  const pages = ['home','about','faq','onboarding'];
+
+  function navigate(page) {
+    pages.forEach(p => {
+      document.getElementById('page-' + p).classList.remove('active');
+      const navEl = document.getElementById('nav-' + p);
+      if (navEl) navEl.classList.remove('active');
+    });
+    document.getElementById('page-' + page).classList.add('active');
+    const navEl = document.getElementById('nav-' + page);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── FAQs ──
+  const faqs = [
+    {
+      q: "What age range does Stork serve?",
+      a: "Currently, Stork Clothing Co serves babies from newborn (including preemie) up to 12 months. We size our boxes in increments that match your baby's growth stage, so you'll always receive clothes that fit right now — not next month. We're actively building our Toddler plan (12–36 months) and will be launching it soon!"
+    },
+    {
+      q: "How does the sizing work? What if clothes don't fit?",
+      a: "When you sign up, you tell us your baby's current size. Each month, we use your baby's age and your size feedback to proactively send the correct (or next) size. If something doesn't fit, our free returns are postage-paid — simply drop the item in the return bag included in your box and we'll adjust your size profile for next time."
+    },
+    {
+      q: "Can I skip a month or pause my subscription?",
+      a: "Absolutely! You can skip, pause, or cancel your subscription at any time from your account dashboard — no questions asked, no cancellation fees. We ask that changes be made at least 5 business days before your next scheduled shipping date to take effect for that cycle."
+    },
+    {
+      q: "What fabrics do you use? Are they safe for sensitive skin?",
+      a: "All Stork clothing is made from GOTS-certified organic cotton. Every item is OEKO-TEX Standard 100 certified, meaning it's been tested and verified to be free from over 100 harmful chemicals including azo dyes, formaldehyde, and heavy metals. We specifically curate pieces with flat seams and tagless designs to be gentle on the most sensitive newborn skin."
+    },
+    {
+      q: "How many pieces come in each box?",
+      a: "It depends on your plan: our Starter plan includes 5 curated pieces, the Grow plan includes 8 pieces, and the Luxe plan includes 10 premium pieces. Each box is styled as a coordinated collection so everything mixes and matches easily."
+    },
+    {
+      q: "Can I gift a Stork subscription?",
+      a: "Yes! Stork makes a wonderful baby shower or newborn gift. You can purchase a 1-, 3-, or 6-month gift subscription from our Gift page. The recipient receives a beautiful gift card with instructions to set up their baby's profile, and the box ships directly to their address."
+    },
+    {
+      q: "What is your return policy?",
+      a: "Each box includes a prepaid return label and a return bag. You may return any unwanted items within 14 days of receiving your box. Once we receive the return, your account is credited — there's no charge for returned items. We use your return feedback (too small, didn't love the style, etc.) to refine your next box."
+    },
+    {
+      q: "Do you offer gender-neutral options?",
+      a: "Yes — and it's actually one of our most popular style preferences! You can indicate 'Neutral' in your style profile and our stylists will focus on earthy tones, whites, creams, and soft patterns that work beautifully regardless of gender."
+    },
+    {
+      q: "When will my first box arrive?",
+      a: "After completing sign-up, your first box typically ships within 3–5 business days. After that, your box ships on the same date each month (based on your subscription start date). You'll receive a shipping confirmation email with tracking information for every shipment."
+    },
+    {
+      q: "Is there a commitment or minimum subscription period?",
+      a: "There is no minimum commitment. Stork is a month-to-month subscription and you are free to cancel at any time. We do offer discounted rates for 3-month and 6-month prepaid plans if you'd like to save — ask us about those via email!"
+    }
+  ];
+
+  function buildFAQs() {
+    const container = document.getElementById('faq-container');
+    faqs.forEach((faq, i) => {
+      const item = document.createElement('div');
+      item.className = 'faq-item';
+      item.innerHTML = `
+        <button class="faq-question" onclick="toggleFAQ(${i})" id="fq-btn-${i}">
+          ${faq.q}
+          <span class="faq-chevron" id="fq-chev-${i}">▼</span>
+        </button>
+        <div class="faq-answer" id="fq-ans-${i}">
+          <p>${faq.a}</p>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function toggleFAQ(i) {
+    const ans = document.getElementById('fq-ans-' + i);
+    const btn = document.getElementById('fq-btn-' + i);
+    const chev = document.getElementById('fq-chev-' + i);
+    const isOpen = ans.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.faq-question').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.faq-chevron').forEach(el => el.classList.remove('open'));
+    if (!isOpen) {
+      ans.classList.add('open');
+      btn.classList.add('open');
+      chev.classList.add('open');
+    }
+  }
+
+  buildFAQs();
+
+  // ── ONBOARDING STEPPER ──
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  function updateProgress(step) {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('ps-' + i);
+      if (i < step) { el.className = 'progress-step done'; el.textContent = '✓'; }
+      else if (i === step) { el.className = 'progress-step current'; el.textContent = i; }
+      else { el.className = 'progress-step upcoming'; el.textContent = i; }
+    }
+    const pct = ((step - 1) / 3) * 100;
+    document.getElementById('progress-line').style.width = pct + '%';
+  }
+
+  function nextStep(from) {
+    // Basic validation
+    if (from === 1) {
+      const fn = document.getElementById('f-firstname').value.trim();
+      const em = document.getElementById('f-email').value.trim();
+      if (!fn || !em) { alert('Please fill in your first name and email.'); return; }
+    }
+    if (from === 2) {
+      const bn = document.getElementById('f-babyname').value.trim();
+      const sz = document.getElementById('f-size').value;
+      if (!bn || !sz) { alert('Please enter your baby\'s name and size.'); return; }
+    }
+    if (from === 3) {
+      const pay = document.getElementById('f-payment').value;
+      if (!pay) { alert('Please select a payment method.'); return; }
+    }
+
+    document.getElementById('form-step-' + from).classList.remove('active');
+    const nextNum = from + 1;
+    document.getElementById('form-step-' + nextNum).classList.add('active');
+    updateProgress(nextNum);
+    currentStep = nextNum;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevStep(from) {
+    document.getElementById('form-step-' + from).classList.remove('active');
+    const prevNum = from - 1;
+    document.getElementById('form-step-' + prevNum).classList.add('active');
+    updateProgress(prevNum);
+    currentStep = prevNum;
+  }
+</script>
+
+</body>
+</html>
